@@ -1,45 +1,191 @@
+
+class sprite {
+    constructor({ position, src }) {
+        this.position = position;
+        this.image = new Image();
+        this.image.src = src;
+    }
+
+    draw() {
+        c.drawImage(this.image, this.position.x, this.position.y);
+    }
+}
+
+//canvas preparation
 const canvas = document.querySelector('#canvas');
 const c = canvas.getContext('2d');
+const tempCanvas = document.createElement("canvas");
+const tempC = tempCanvas.getContext("2d");
+
 const objects = [];
 
 // Resizing
-wdh = canvas.width = window.innerWidth;
-hgt = canvas.height = 3 * window.innerWidth / 4;
+// wdh = canvas.width = window.innerWidth;
+// hgt = canvas.height = 3 * window.innerWidth / 4;
+let wdh = canvas.width = 1024;
+let hgt = canvas.height = 576;
 
+const player = new sprite({
+    position: {
+        x: 0,
+        y: 0
+    },
+    src: './GameAssets/Images/playerDown.png'
+})
 
-const background = {};
-background.image = new Image();
-background.image.src = './GameAssets/Images/GameDemoMap.png';
-background.x = -330;
-background.y = -400;
-
-const player = {};
-player.image = new Image();
-player.image.src = './GameAssets/Images/playerDown.png';
-player.x = (wdh - player.image.width) / 2;
-player.y = (hgt - player.image.height) / 2;
-
-objects.push(background, player);
+const background = new sprite({
+    position: {
+        x: -350,
+        y: -450
+    },
+    src: './GameAssets/Images/GameDemoMap.png'
+})
 
 background.image.onload = () => {
-    // c.drawImage(background, -330, -400)
-    // c.drawImage(playerImage, (wdh - playerImage.width) / 2, (hgt - playerImage.height) / 2)
-    objects.forEach(
-        (object) => {
-            c.drawImage(object.image, object.x, object.y);
-            console.log(object)
-        }
+    player.position.x = (wdh - player.image.width / 4) / 2;
+    player.position.y = (hgt - player.image.height) / 2;
+
+    background.draw();
+    // player.draw();
+    c.drawImage(
+        player.image,
+        0,
+        0,
+        player.image.width / 4,
+        player.image.height,
+        player.position.x,
+        player.position.y,
+        player.image.width / 4,
+        player.image.height,
     )
+    // objects.forEach(
+    //     (object) => {
+    //         c.drawImage(object.image, object.x, object.y);
+    //     }
+    // )
 }
 
+const keys = {
+    ArrowUp: {
+        pressed: false
+    },
+    ArrowDown: {
+        pressed: false
+    },
+    ArrowLeft: {
+        pressed: false
+    },
+    ArrowRight: {
+        pressed: false
+    },
+}
 
-window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = 3 * window.innerWidth / 4;
-    objects.forEach((object) => {
-        c.drawImage(object.image, object.x, object.y);
-        console.log(object)
-    }
+const animate = () => {
+    window.requestAnimationFrame(animate);
+    background.draw();
+    // c.drawImage(background.image, background.position.x, background.position.y)
+    c.drawImage(
+        player.image,
+        0,
+        0,
+        player.image.width / 4,
+        player.image.height,
+        player.position.x,
+        player.position.y,
+        player.image.width / 4,
+        player.image.height,
     )
-    // 1024x576
+
+    if (keys.ArrowUp.pressed && lastKey === "ArrowUp") background.position.y += 3;
+    else if (keys.ArrowDown.pressed && lastKey === "ArrowDown") background.position.y -= 3;
+    else if (keys.ArrowLeft.pressed && lastKey === "ArrowLeft") background.position.x += 3;
+    else if (keys.ArrowRight.pressed && lastKey === "ArrowRight") background.position.x -= 3;
+
+
+}
+animate();
+
+let lastKey = "";
+window.addEventListener('keydown', (e) => {
+    switch (e.key) {
+        case 'ArrowUp':
+            keys.ArrowUp.pressed = true;
+            lastKey = "ArrowUp";
+            break;
+        case 'ArrowDown':
+            keys.ArrowDown.pressed = true;
+            lastKey = "ArrowDown";
+            break;
+        case 'ArrowLeft':
+            keys.ArrowLeft.pressed = true;
+            lastKey = "ArrowLeft";
+            break;
+        case 'ArrowRight':
+            keys.ArrowRight.pressed = true;
+            lastKey = "ArrowRight";
+            break;
+    }
 })
+
+window.addEventListener('keyup', (e) => {
+    switch (e.key) {
+        case 'ArrowUp':
+            keys.ArrowUp.pressed = false;
+            break;
+        case 'ArrowDown':
+            keys.ArrowDown.pressed = false;
+            break;
+        case 'ArrowLeft':
+            keys.ArrowLeft.pressed = false;
+            break;
+        case 'ArrowRight':
+            keys.ArrowRight.pressed = false;
+            break;
+    }
+})
+
+
+// window.addEventListener('resize', () => {
+//     let wdh = canvas.width = window.innerWidth;
+//     let hgt = canvas.height = 3 * window.innerWidth / 4;
+//     c.drawImage(background.image, background.x, background.y)
+//     c.drawImage(
+//         player.image,
+//         0,
+//         0,
+//         player.image.width / 4,
+//         player.image.height,
+//         wdh / 2,
+//         hgt / 2,
+//         player.image.width / 4,
+//         player.image.height,
+//     )
+
+
+
+//     // let wdh = canvas.width = window.innerWidth;
+//     // let hgt = canvas.height = 3 * window.innerWidth / 4;
+//     // c.drawImage(background.image, background.x, background.y)
+//     // c.drawImage(
+//     //     player.image,
+//     //     0,
+//     //     0,
+//     //     player.image.width / 4,
+//     //     player.image.height,
+//     //     player.x,
+//     //     player.y,
+//     //     player.image.width / 4,
+//     //     player.image.height,
+//     // )
+
+//     // let tcw = tempCanvas.width = canvas.width;
+//     // let tch = tempCanvas.height = canvas.height;
+//     // tempC.drawImage(canvas, 0, 0);
+//     // let cw = canvas.width = window.innerWidth;
+//     // let ch = canvas.height = 3 * window.innerWidth / 4;
+//     // c.drawImage(tempCanvas, 0, 0, tcw * (cw / tcw), tch * (ch / tch));
+//     // console.log(`tcw: ${tcw}, tch: ${tch}, cw: ${cw}, ch: ${ch}`)
+//     // console.log(`tcw: ${cw / tcw}, tch: ${ch / tch}`)
+//     // 1024x576
+// })
+
