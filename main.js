@@ -1,4 +1,4 @@
-
+console.log(collisions);
 class sprite {
     constructor({ position, src }) {
         this.position = position;
@@ -24,6 +24,39 @@ const objects = [];
 // hgt = canvas.height = 3 * window.innerWidth / 4;
 let wdh = canvas.width = 1024;
 let hgt = canvas.height = 576;
+
+const collisionsMap = [];
+for (let i = 0; i < collisions.length; i += 70) {
+    collisionsMap.push(collisions.slice(i, 70 + i))
+}
+
+class Boundary {
+    constructor({ position }) {
+        this.position = position;
+        this.width = 48;
+        this.height = 48;
+    }
+    draw() {
+        c.fillStyle = "red";
+        c.fillRect(this.position.x, this.position.y, this.width, this.height);
+    }
+}
+
+const boundaries = [];
+
+collisionsMap.forEach((row, i) => {
+    row.forEach((symbol, j) => {
+        boundaries.push(
+            new Boundary({
+                position: {
+                    x: j * 48,
+                    y: i * 48
+                }
+            })
+        )
+
+    })
+})
 
 const player = new sprite({
     position: {
