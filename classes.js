@@ -1,20 +1,21 @@
 class sprite {
-    constructor({ position, src, frames = { max: 1 } }) {
+    constructor({ position, image, frames = { max: 1 }, sprites }) {
         this.position = position;
-        this.image = new Image();
-        this.image.src = src;
-        this.frames = frames;
+        this.image = image;
+        this.frames = { ...frames, val: 0, elapsed: 0 };
         this.image.onload = () => {
             this.width = this.image.width / this.frames.max;
             this.height = this.image.height;
         }
+        this.moving = false;
+        this.sprites = sprites
     }
 
     draw() {
         // c.drawImage(this.image, this.position.x, this.position.y);
         c.drawImage(
             this.image,
-            0,
+            this.frames.val * this.image.width / this.frames.max,
             0,
             this.image.width / this.frames.max,
             this.image.height,
@@ -23,6 +24,12 @@ class sprite {
             this.image.width / this.frames.max,
             this.image.height,
         )
+        if (!this.moving) return;
+        if (this.frames.max > 1) this.frames.elapsed++;
+        if (this.frames.elapsed % 10 === 0) {
+            if (this.frames.val < this.frames.max - 1) this.frames.val++;
+            else this.frames.val = 0;
+        }
     }
 }
 
@@ -35,7 +42,7 @@ class Boundary {
         this.height = 48;
     }
     draw() {
-        c.fillStyle = "rgba(255, 0, 0, 0.2)";
+        c.fillStyle = "rgba(255, 0, 0, 0)";
         c.fillRect(this.position.x, this.position.y, this.width, this.height);
     }
 }

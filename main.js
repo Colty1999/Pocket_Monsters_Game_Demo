@@ -12,13 +12,29 @@ const objects = [];
 let wdh = canvas.width = 1024;
 let hgt = canvas.height = 576;
 
+//import images for player up down left and right as new images
+const playerUp = new Image();
+playerUp.src = './GameAssets/Images/playerUp.png';
+const playerDown = new Image();
+playerDown.src = './GameAssets/Images/playerDown.png';
+const playerLeft = new Image();
+playerLeft.src = './GameAssets/Images/playerLeft.png';
+const playerRight = new Image();
+playerRight.src = './GameAssets/Images/playerRight.png';
+
 const player = new sprite({
     position: {
         x: canvas.width / 2 - 192 / 4 / 2,
         y: canvas.height / 2 - 68 / 2
     },
-    src: './GameAssets/Images/playerDown.png',
-    frames: { max: 4 }
+    image: playerDown,
+    frames: { max: 4 },
+    sprites: {
+        up: playerUp,
+        down: playerDown,
+        left: playerLeft,
+        right: playerRight
+    }
 })
 
 const collisionsMap = [];
@@ -47,20 +63,25 @@ collisionsMap.forEach((row, i) => {
     })
 })
 
+
+const backgroundImage = new Image();
+backgroundImage.src = './GameAssets/Images/GameDemoMap.png';
 const background = new sprite({
     position: {
         x: offset.x,
         y: offset.y
     },
-    src: './GameAssets/Images/GameDemoMap.png'
+    image: backgroundImage
 })
 
+const foregroundImage = new Image();
+foregroundImage.src = './GameAssets/Images/GameMapForeground.png';
 const foreground = new sprite({
     position: {
         x: offset.x,
         y: offset.y
     },
-    src: './GameAssets/Images/GameMapForeground.png'
+    image: foregroundImage
 })
 
 background.image.onload = () => {
@@ -104,11 +125,13 @@ const animate = () => {
         boundary.draw();
     })
     player.draw();
-    // c.drawImage(background.image, background.position.x, background.position.y)
 
 
     let moving = true;
+    player.moving = false;
     if (keys.ArrowUp.pressed && lastKey === "ArrowUp") {
+        player.moving = true;
+        player.image = player.sprites.up;
         for (let i = 0; i < boundaries.length; i++) {
             const boundary = boundaries[i];
             if (
@@ -128,6 +151,8 @@ const animate = () => {
         if (moving) movables.forEach((movable) => { movable.position.y += 3 })
     }
     else if (keys.ArrowDown.pressed && lastKey === "ArrowDown") {
+        player.moving = true;
+        player.image = player.sprites.down;
         for (let i = 0; i < boundaries.length; i++) {
             const boundary = boundaries[i];
             if (
@@ -147,6 +172,8 @@ const animate = () => {
         if (moving) movables.forEach((movable) => { movable.position.y -= 3 })
     }
     else if (keys.ArrowLeft.pressed && lastKey === "ArrowLeft") {
+        player.moving = true;
+        player.image = player.sprites.left;
         for (let i = 0; i < boundaries.length; i++) {
             const boundary = boundaries[i];
             if (
@@ -166,6 +193,8 @@ const animate = () => {
         if (moving) movables.forEach((movable) => { movable.position.x += 3 })
     }
     else if (keys.ArrowRight.pressed && lastKey === "ArrowRight") {
+        player.moving = true;
+        player.image = player.sprites.right;
         for (let i = 0; i < boundaries.length; i++) {
             const boundary = boundaries[i];
             if (
