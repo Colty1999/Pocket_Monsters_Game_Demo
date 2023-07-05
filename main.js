@@ -12,34 +12,6 @@ const objects = [];
 let wdh = canvas.width = 1024;
 let hgt = canvas.height = 576;
 
-class sprite {
-    constructor({ position, src, frames = { max: 1 } }) {
-        this.position = position;
-        this.image = new Image();
-        this.image.src = src;
-        this.frames = frames;
-        this.image.onload = () => {
-            this.width = this.image.width / this.frames.max;
-            this.height = this.image.height;
-        }
-    }
-
-    draw() {
-        // c.drawImage(this.image, this.position.x, this.position.y);
-        c.drawImage(
-            this.image,
-            0,
-            0,
-            this.image.width / this.frames.max,
-            this.image.height,
-            this.position.x,
-            this.position.y,
-            this.image.width / this.frames.max,
-            this.image.height,
-        )
-    }
-}
-
 const player = new sprite({
     position: {
         x: canvas.width / 2 - 192 / 4 / 2,
@@ -49,24 +21,9 @@ const player = new sprite({
     frames: { max: 4 }
 })
 
-
 const collisionsMap = [];
 for (let i = 0; i < collisions.length; i += 70) {
     collisionsMap.push(collisions.slice(i, 70 + i))
-}
-
-class Boundary {
-    static width = 48;
-    static height = 48;
-    constructor({ position }) {
-        this.position = position;
-        this.width = 48;
-        this.height = 48;
-    }
-    draw() {
-        c.fillStyle = "rgba(255, 0, 0, 0.2)";
-        c.fillRect(this.position.x, this.position.y, this.width, this.height);
-    }
 }
 
 const boundaries = [];
@@ -112,22 +69,6 @@ background.image.onload = () => {
 
     background.draw();
     player.draw();
-    // c.drawImage(
-    //     player.image,
-    //     0,
-    //     0,
-    //     player.image.width / 4,
-    //     player.image.height,
-    //     player.position.x,
-    //     player.position.y,
-    //     player.image.width / 4,
-    //     player.image.height,
-    // )
-    // objects.forEach(
-    //     (object) => {
-    //         c.drawImage(object.image, object.x, object.y);
-    //     }
-    // )
 }
 
 const keys = {
