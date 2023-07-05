@@ -98,6 +98,14 @@ const background = new sprite({
     src: './GameAssets/Images/GameDemoMap.png'
 })
 
+const foreground = new sprite({
+    position: {
+        x: offset.x,
+        y: offset.y
+    },
+    src: './GameAssets/Images/GameMapForeground.png'
+})
+
 background.image.onload = () => {
     player.position.x = (wdh - player.image.width / 4) / 2;
     player.position.y = (hgt - player.image.height) / 2;
@@ -137,7 +145,7 @@ const keys = {
     },
 }
 
-const movables = [background, ...boundaries]
+const movables = [background, foreground, ...boundaries]
 
 const rectangularCollision = ({ rectangle1, rectangle2 }) => {
     return (
@@ -235,7 +243,7 @@ const animate = () => {
         }
         if (moving) movables.forEach((movable) => { movable.position.x -= 3 })
     }
-
+    foreground.draw();
 
 }
 animate();
