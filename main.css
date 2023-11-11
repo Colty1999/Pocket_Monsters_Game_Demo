@@ -4,6 +4,13 @@
     box-sizing: border-box;
 }
 
+/* .container {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    padding-top: 12vh;
+} */
+
 canvas {
     border: 1px solid black;
 

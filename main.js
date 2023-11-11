@@ -9,8 +9,9 @@ const objects = [];
 // Resizing
 // wdh = canvas.width = window.innerWidth;
 // hgt = canvas.height = 3 * window.innerWidth / 4;
-let wdh = canvas.width = 1024;
-let hgt = canvas.height = 576;
+let scale = 1;
+let wdh = canvas.width = 1024 * scale;
+let hgt = canvas.height = 576 * scale;
 
 //import images for player up down left and right as new images
 const playerUp = new Image();
@@ -24,8 +25,8 @@ playerRight.src = './GameAssets/Images/playerRight.png';
 
 const player = new sprite({
     position: {
-        x: canvas.width / 2 - 192 / 4 / 2,
-        y: canvas.height / 2 - 68 / 2
+        x: (canvas.width / 2 - 192 / 4 / 2),
+        y: (canvas.height / 2 - 68 / 2)
     },
     image: playerDown,
     frames: { max: 4 },
@@ -301,4 +302,3 @@ window.addEventListener('keyup', (e) => {
 //     // console.log(`tcw: ${cw / tcw}, tch: ${ch / tch}`)
 //     // 1024x576
 // })
-
